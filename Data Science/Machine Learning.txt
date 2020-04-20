@@ -1,0 +1,114 @@
+Machine Learning
+reduce time spent programming - correct english spelling errors
+customize products to make it better for specific users - correct spelling errors for other languages
+programme for cognitical processes.
+
+Give 'labeled examples' to 'machine learning system', the system has a model defined previously by learned internal parameters. The model would thus come up with logic using which it would predict labels y' for unlabeled example.
+
+ML systems learn how to combine input to produce useful predictions on never-before-seen data
+
+What are we predicting? Label is the true thing we're predicting: y (The y variable in basic linear regression)
+
+Y is predicted based on what? It is predicted based on features of the examples. Features are input variables (x) describing our data. The {x1, x2, ... xn} variables in basic linear regression.
+
+So label = weight of a feature + bias
+y = (w*x)+ b
+
+Example is a particular instance of data, x
+
+Labeled example has {features, label}: (x, y) - Used to train the model
+Unlabeled example has {features, ?}: (x, ?) - Used for making predictions on new data
+
+Model
+A model defines the relationship between features and label. It is defined by internal parameters, which are learned. 
+
+Phases of Model
+Training - feed model with labeled examples. Training a model simply means learning (determining) good values for all the weights and the bias from labeled examples.
+Inference - use model to make predictions of labels (y') for unlabeled examples
+
+Regression vs. classification
+A regression model predicts continuous values. Continous values can be other than integers. For example, regression models make predictions that answer questions like the following:
+
+What is the value of a house in California? What is the probability that a user will click on this ad?
+
+A classification model predicts discrete values. Classification is like selecting correct answer from multiple choice where all choices are known. For example, classification models make predictions that answer questions like the following:
+
+Is a given email message spam or not spam? Is this an image of a dog, a cat, or a hamster?
+
+Loss
+Loss is a number indicating how bad the model's prediction was on a single example.
+
+Squared loss is one function of calculating loss usually deployed for linear regression models. There could be many functions to compute loss.
+Squared loss
+  = the square of the difference between the label and the prediction
+  = (observation - prediction(x))2
+  = (y - y')2
+  
+Mean Squared Loss
+Mean square error (MSE) is the average squared loss per example over the whole dataset. Although MSE is commonly-used in machine learning, it is neither the only practical loss function nor the best loss function for all circumstances.
+
+Reducing Loss: An Iterative (over single example) Approach
+
+Model works on unlabeled examples to predicted labels: y'. If there is inaccuracy in the predictions (y - y' !=0) ie there is loss, the internal parameters are learnt (compute parameter updated by a mysterious box) and model re-designed until overall loss stops changing or at least changes extremely slowly.
+
+The "model" takes one or more features as input, initial values of their weights and bias are picked at random and returns one prediction (y') as output of one example.
+loss function will then gives us loss graph for one example.
+the machine learning system examines the value of the loss function and generates new values for bias and weights
+The goal of training a model is to find a set of weights and biases that have low loss, on average, across all examples. Usually, you iterate until overall loss stops changing or at least changes extremely slowly. When that happens, we say that the model has converged. This approach is called Iterative Approach.
+
+Iterative strategies are prevalent in machine learning, primarily because they scale so well to large data sets.
+
+Gradient Descent
+
+Plot loss for all possible values of weight of one feature for one example in the batch. This plot of loss vs. weights will always be convex. One would always get a convex which would have one minimum. That minimum is point of covergence for the model where slope will be zero. If there are weights for two features, you get a 3d-bowl which would also have a minimum point.
+
+Calculating the loss function for every conceivable value of weights over the entire data set (all examples) would be an inefficient way of finding the convergence point.
+Gradient descent is a better mechanism.
+
+Pick a starting point at random for weights. calculate loss for one example in the batch. This loss will be a point on the plot of loss vs weights which we have not actually plotted in this mechanism.
+The gradient descent algorithm then calculates the gradient of the loss curve at this point. The gradient of this loss point is equal to the derivative (slope) of the curve, and tells you which way is "warmer" or "colder." since this gradient is a vector.
+
+gradient of loss for value w = slope of the point on the loss curve where value is w. The numerical value is the magnitude and the sign is the direction.
+
+When there are multiple weights (meaning w1, w2, w3...) for multiple features (multi-dimensional model)
+gradient of loss for any point on that multi-dimensional bowl = vector of partial derivatives (this is calculus terminology) with respect to all the weights.
+
+To increase or decrease the next weight?
+The gradient descent algorithm takes a step in the direction of the negative gradient. The vector direction decides that. The algorithm moves (increases / decreases) the weight opposite to the vector's direction.
+
+How much to change the weight?
+A fraction of the magnitue of the gradient vector. This fraction of the gradient's magnitude (or percentage of gradient's magnitude) is called Learning Rate. 
+
+For next iteration, use this new 'derived' weight and find the gradient again. But for next iteration use next example in the batch.
+
+Learning Rate
+Should not be too big or too small. Ideal is Goldilocks learning rate.
+Learning rate for every iteration should be inversely proportional to loss gradient (magnitude)
+
+Stochastic Gradient Descent
+When batch size is equal to one where the one example is randomly picked then it is called stochastic gradient descent
+
+Mini-batch stochastic gradient descent (mini-batch SGD) is a compromise between full-batch iteration and SGD. A mini-batch is typically between 10 and 1,000 examples, chosen at random. Mini-batch SGD reduces the amount of noise in SGD but is still more efficient than full-batch.
+
+TensorFlow
+TensorFlow is a free and open-source software library for dataflow and differentiable programming across a range of tasks. It is a symbolic math library, and is also used for machine learning applications such as neural networks. TensorFlow provides stable Python and C APIs.
+
+Toolkits in TensorFlow
+
+High-level kits like tf.estimator which is a high level predefined architectures such as linear regression, neural networks, etc. Low level APIs can be used to build your own models by defining a series of mathematical operations. Recommended to use highest level of abstraction that is available and solves the problem.
+
+tf.estimator pseudocode for linear classification program
+
+import tensorflow as tf
+
+# Set up a linear classifier. give feature columns names
+classifier = tf.estimator.LinearClassifier(feature_columns)
+
+# Train the model on some example / training data.
+classifier.train(input_fn=train_input_fn, steps=2000)
+
+# Use it to predict using test data
+predictions = classifier.predict(input_fn=predict_input_fn)
+
+ML Steps
+Visualize your data. Examine by plotting.

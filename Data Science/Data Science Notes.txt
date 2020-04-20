@@ -1,0 +1,17 @@
+Machine Learning
+reduce time spent programming - correct english spelling errors
+customize products to make it better for specific users - correct spelling errors for other languages
+programme for cognitical processes.
+
+give 'examples' to 'machine', machine would come up with logic
+
+ML systems learn how to combine input to produce useful predictions on never-before-seen data
+
+What are we predicting? Label is the true thing we're predicting: y (The y variable in basic linear regression)
+
+Y is predicted based on what? It is predicted based on features of the examples. Features are input variables (x) describing our data. The {x1, x2, ... xn} variables in basic linear regression.
+
+Example is a particular instance of data.
+
+Labeled example has {features, label}: (x, y) - Used to train the model
+Unlabeled example has {features, ?}: (x, ?) - Used for making predictions on new data
