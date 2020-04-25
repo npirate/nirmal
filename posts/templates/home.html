@@ -1,0 +1,7 @@
+<h1>Message Board Homepage</h1>
+
+<ul><!-- the syntax of curly brackets is important-->
+    {% for post in all_posts_list %}
+    <li>{{ post }}</li>
+    {% endfor %}
+</ul>
