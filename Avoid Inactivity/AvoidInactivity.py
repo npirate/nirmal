@@ -5,7 +5,7 @@ import random, string, datetime
 
 #print ('imported')
 
-inactivity_check = 120
+inactivity_check = 60
 check_interval_sec = 60
 try:
     for i in range(inactivity_check):
