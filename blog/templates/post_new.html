@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>New Post</h1>
+<form action = "", method="POST">
+    {% csrf_token %} <!--protect form from cross-site scripting attacks-->
+    {{ form.as_p }} <!--each field of the form is rendered as p tag-->
+    <input type="submit" value = "Save" />
+</form>
+{% endblock content %}

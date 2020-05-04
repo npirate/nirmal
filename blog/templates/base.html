@@ -1,4 +1,4 @@
-{% load static %}
+{% load static %} <!-- get styling files from static folder-->
 
 <html>
     <head>
@@ -8,7 +8,12 @@
     </head>
     <body>
         <header>
-            <h1><a href="{% url 'home'%}">Django Blog</a></h1>
+            <div class="nav-left">
+            <h1><a href="{% url 'home'%}">Django Blog</a></h1><!-- use the url-view named 'home' to display details-->
+            </div>
+            <div class = "nav-right">
+                <a href="{% url 'post_new' %}"> Add New Blog </a><!--basically we are adding another hyperlink that will take user to url-view name 'post_new'-->
+            </div>
         </header>
         <div>
             {% block content %}

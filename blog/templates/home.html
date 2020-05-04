@@ -1,7 +1,7 @@
 {% extends 'base.html' %} <!--This is where the base.html template will be brought in-->
 
 {% block content %}
-    {% for post in object_list %}
+    {% for post in object_list %}<!-- This object list is returned by the view that is linked with the url-->
     <div class="post-entry">
         <h2><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h2>
         <p>{{ post.body }}</p>
