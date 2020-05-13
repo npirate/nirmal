@@ -1,8 +1,9 @@
 import pandas as pd
 
-df = pd.read_excel('AllReview.xlsx',sheet_name = 'Review',index_col=0)#using MemberID as index
+df = pd.read_excel('Lakeview.xlsx',sheet_name = 'Review',index_col=0)#using MemberID as index
 
-def get_sdx(text): #function to check if there is discrepancy in count of colon and semicolon in the text and also extract suggested diagnosis codes after removing is dot.
+#function to check if there is discrepancy in count of colon and semicolon in the text and also extract suggested diagnosis codes after removing is dot.
+def get_sdx(text): 
     text = str(text)
     words_list = text.strip().replace('.','').replace(';','; ').split(' ')
     sdx = [i[:-1] for i in words_list if ':' in i]
@@ -29,6 +30,8 @@ sicd = pd.DataFrame(my_list,columns=['ID','S_ICD'])
 #making a special df containing MemberID and Discrepancy
 
 discrepancy = sicd.groupby(['ID']).head(1)
+
+discrepancy = discrepancy.rename(columns = {'S_ICD':'Discrepancy?'})
 
 #function to get captured diagnosis codes for each MemberId. Here we are not capturing any discrepancy
 
@@ -80,16 +83,20 @@ icdweights = pd.merge(hccweights, icdhcc, how='inner', right_on = 'CMS-HCC Model
 #getting weights of suggested icd codes for each memberid
 sicdweights = pd.merge(sicd, icdweights, how = 'inner', left_on = 'S_ICD', right_on = 'Diagnosis Code')
 sdxweights = sicdweights.groupby(['ID'])['Weight'].sum().reset_index() #else indexing does not happen and hence gives series as output. Need dataframe as output and reindexing will do that.
+sdxweights = sdxweights.rename(columns = {'Weight':'P_MRA_SDx'})
 
 #getting weights of captured icd codes for each memberid
 aicdweights = pd.merge(aicd, icdweights, how = 'inner', left_on = 'A_ICD', right_on = 'Diagnosis Code')
 adxweights = aicdweights.groupby(['ID'])['Weight'].sum().reset_index() #else indexing does not happen and hence gives series as output. Need dataframe as output and reindexing will do that.
+adxweights = adxweights.rename(columns = {'Weight':'P_MRA_ADx'})
 
 #getting weights of disease interactions for each memberid
 discore = pd.read_excel('DI_Score.xlsx', index_col = 0)
 
 discore = pd.merge(alldd, discore, how='inner', left_on =['Disease_x','Disease_y'], right_on =['DI1','DI2'])
 diweights = discore.groupby(['ID'])['Score'].sum().reset_index()
+
+diweights = diweights.rename(columns = {'Score':'P_MRA_DxInt'})
 
 #bringing all weights together for export and hence left join
 
@@ -99,7 +106,9 @@ discrepancy_sdxweights_adxweights = pd.merge(discrepancy_sdxweights, adxweights,
 
 discrepancy_sdxweights_adxweights_diweights = pd.merge(discrepancy_sdxweights_adxweights, diweights, how='left', left_on ='ID', right_on='ID')
 
-output = discrepancy_sdxweights_adxweights_diweights
+output = pd.merge(df, discrepancy_sdxweights_adxweights_diweights, how = 'left', left_index = True, right_on = 'ID')
+
+output = output.drop(['s_dx','a_dx'], axis = 1)
 
 output.to_excel('AllResult.xlsx',index=False)
 

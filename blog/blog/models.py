@@ -16,4 +16,4 @@ class Post(models.Model):# defining the columns that will be created in the sqll
         return self.title
 
     def get_absolute_url(self):
-        return reverse ('post_detail', args = (str(self.id))) #after Post entry is executed post_detail url-view is the location to go to. see post detail url definition to see why self.id is necessary
+        return reverse ('post_detail', args = (str(self.id))) #after Post entry is added to db by model, post_detail url-view is the location to go to. see post detail url definition to see why self.id is necessary

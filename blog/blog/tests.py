@@ -21,9 +21,12 @@ class BlogTest (TestCase):
             author = self.user,
         )
 
-    def test_string_reporesentation(self):
+    def test_string_representation(self):
         post = Post(title = 'Test Title')
         self.assertEqual(str(post),post.title)
+
+    def test_get_absolute_url(self):
+        self.assertEqual(self.post.get_absolute_url(), 'post/1/')
 
     def test_post_content(self):
         self.assertEqual(f'{self.post.title}', 'Test Title')
@@ -43,4 +46,7 @@ class BlogTest (TestCase):
         self.assertEqual(no_response.status_code, 404)
         self.assertContains(response, 'Test Title')
         self.assertTemplateUsed(response, 'post_detail.html')
+
+    #def test_post_create_view(self):
+
 
