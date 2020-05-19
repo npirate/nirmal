@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="article-entry">
+    <h2>{{ object.first_name }} | {{ object.last_name }} </h2>
+    <p>{{ object.dob }}</p>
+    </div>
+    <p><a href="{% url 'patient_edit' patient.pk %}">Edit</a> | <a href="{% url 'patient_delete' patient.pk %}">Delete</a></p>
+    <p> Back to <a href="{% url 'patient_list' %}">All Patients</a>.</p>
+{% endblock content %}

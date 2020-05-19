@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'patients.apps.PatientsConfig',
     'crispy_forms', #3rd party
     'home.apps.HomeConfig',
     'users.apps.UsersConfig',

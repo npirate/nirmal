@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Patients{% endblock title %}
+
+{% block content %}
+
+    {% for patient in object_list %}
+    <div class="card">
+
+        <div class="card-header">
+            <span class="font-weight-bold">{{ patient.first_name }} {{ patient.last_name }}</span>
+        </div>
+
+        <div class="card-body">
+            {{ patient.dob }}
+            {{ patient.create_by}}
+            <a href="{% url 'patient_edit' patient.pk %}">Edit</a> | <a href="{% url 'patient_delete' patient.pk %}">Delete</a>
+        </div>
+
+        <div class="card-footer text-center text-muted">
+            {% for visit in patient.visits.all %}<!--we link patient with all its visits using 'visits' which is related name of the patient model-->
+            <p>
+                <span class="font-weight-bold">{{ visit.create_by }} &middot;</span>
+                {{ visit.visit_detail }}
+            </p>
+            {% endfor %}
+        </div>
+
+    </div>
+    <br />
+    {% endfor %}
+{% endblock content %}

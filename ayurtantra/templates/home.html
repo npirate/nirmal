@@ -2,5 +2,12 @@
 {% block title %}Home{% endblock title %} <!--over-rides title of base.html-->
 
 {% block content %}
-
+<div class="jumbotron">
+    <h1 class="display-4">Ayurtantra</h1>
+    <p class="lead">A healthcare website built with Django.</p>
+    <p class="lead">
+    <a class="btn btn-primary btn-lg" href="{% url 'patient_list' %}"
+    role="button">View All Patients</a>
+    </p>
+</div>
 {% endblock content %}
