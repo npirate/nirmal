@@ -1,6 +1,6 @@
 import pandas as pd
 
-df = pd.read_excel('Lakeview.xlsx',sheet_name = 'Review',index_col=0)#using MemberID as index
+df = pd.read_excel('MRA Project\Lakeview.xlsx',sheet_name = 'Review',index_col=0)#using MemberID as index
 
 #function to check if there is discrepancy in count of colon and semicolon in the text and also extract suggested diagnosis codes after removing is dot.
 def get_sdx(text): 
@@ -33,7 +33,7 @@ discrepancy = sicd.groupby(['ID']).head(1)
 
 discrepancy = discrepancy.rename(columns = {'S_ICD':'Discrepancy?'})
 
-#function to get captured diagnosis codes for each MemberId. Here we are not capturing any discrepancy
+#function to get all active diagnosis codes for each MemberId. Here we are not capturing any discrepancy
 
 def get_adx(text):
     text = str(text)
@@ -44,7 +44,27 @@ def get_adx(text):
 
 df['a_dx'] = df['MRA- All Active Codes'].apply(get_adx)
 
-my_dict = dict(zip(df.index, df.a_dx))
+#function to get all inactive active diagnosis codes for each MemberId. Here we are not capturing any discrepancy
+
+
+def get_iadx(text):
+    text = str(text)
+    words_list = text.strip().replace('.','').split(' ')
+    iadx = [i[:-1] for i in words_list if ':' in i]
+    iadx = [''] if len(iadx) == 0 else iadx
+    return iadx
+
+df['ia_dx'] = df['MRA- No Longer Pertains'].apply(get_iadx)
+
+#function to remove ia_dx codes from a_dx
+
+def remove_dx(a_dx, ia_dx):
+    res = [i for i in a_dx if i not in ia_dx]
+    return res
+
+df['final_active_dx'] = df.apply(lambda x: remove_dx(x.a_dx, x.ia_dx), axis = 1)
+
+my_dict = dict(zip(df.index, df.final_active_dx))
 
 my_list = []
 
@@ -54,7 +74,7 @@ for i in my_dict:
 
 aicd = pd.DataFrame(my_list,columns=['ID','A_ICD'])
 
-#need list of all diagnosis codes to check disease interaction
+#need list of all diagnosis codes - final active and suggested to check disease interaction
 
 #copied suggested diagnosis codes
 
@@ -62,9 +82,9 @@ allicd = sicd
 
 allicd = allicd.rename(columns = {'S_ICD':'All_ICD'})
 
-allicd = allicd.append(pd.DataFrame(my_list,columns=['ID','All_ICD']),ignore_index=True) #appended actual diagnosis codes. Ignoring index allowed to append as rows otherwise it was adding a new column of captured diagnosis codes
+allicd = allicd.append(pd.DataFrame(my_list,columns=['ID','All_ICD']),ignore_index=True) #appended final active diagnosis codes. Ignoring index allowed to append as rows otherwise it was adding a new column of captured diagnosis codes
 
-icd2d = pd.read_excel('ICD2D.xlsx')#reading file that maps icds to disease category
+icd2d = pd.read_excel('MRA Project\ICD2D.xlsx')#reading file that maps icds to disease category
 
 alld = pd.merge (allicd, icd2d, how = 'inner', left_on = 'All_ICD', right_on = 'ICD')
 
@@ -74,9 +94,9 @@ alldd = alld[['ID','Disease']].merge(alld[['ID','Disease']], on='ID')
 alldd.drop_duplicates(inplace=True)
 
 #getting weights for each icd
-icdhcc = pd.read_excel('ICD2HCC2020.xlsx')
+icdhcc = pd.read_excel('MRA Project\ICD2HCC2020.xlsx')
 
-hccweights = pd.read_excel('HCC_Weight.xlsx')
+hccweights = pd.read_excel('MRA Project\HCC_Weight.xlsx')
 
 icdweights = pd.merge(hccweights, icdhcc, how='inner', right_on = 'CMS-HCC Model Category V24', left_on = 'HCC')
 
@@ -91,7 +111,7 @@ adxweights = aicdweights.groupby(['ID'])['Weight'].sum().reset_index() #else ind
 adxweights = adxweights.rename(columns = {'Weight':'P_MRA_ADx'})
 
 #getting weights of disease interactions for each memberid
-discore = pd.read_excel('DI_Score.xlsx', index_col = 0)
+discore = pd.read_excel('MRA Project\DI_Score.xlsx', index_col = 0)
 
 discore = pd.merge(alldd, discore, how='inner', left_on =['Disease_x','Disease_y'], right_on =['DI1','DI2'])
 diweights = discore.groupby(['ID'])['Score'].sum().reset_index()
@@ -108,8 +128,8 @@ discrepancy_sdxweights_adxweights_diweights = pd.merge(discrepancy_sdxweights_ad
 
 output = pd.merge(df, discrepancy_sdxweights_adxweights_diweights, how = 'left', left_index = True, right_on = 'ID')
 
-output = output.drop(['s_dx','a_dx'], axis = 1)
+output = output.drop(['s_dx','a_dx','ia_dx','final_active_dx'], axis = 1)
 
-output.to_excel('AllResult.xlsx',index=False)
+output.to_excel('MRA Project\AllResult.xlsx',index=False)
 
 print ('Exported')
