@@ -12,8 +12,10 @@ class Patient(models.Model):
     first_name = models.CharField(max_length = 255)
     last_name = models.CharField(max_length = 255)
     #note = models.
-    #gender_choices = ((M,'Male'),(F,'Female'),)
-    #gender = models.CharField(max_length = 2, choices = gender_choices,)
+    gender_choices = (
+        ('M','Male'),('F','Female'),
+        )
+    gender = models.CharField(max_length = 2, choices = gender_choices,)
     dob = models.DateField()
     create_date = models.DateTimeField(auto_now_add=True)
     create_by = models.ForeignKey(

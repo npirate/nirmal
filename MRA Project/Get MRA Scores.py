@@ -1,6 +1,6 @@
 import pandas as pd
 
-df = pd.read_excel('MRA Project\Lakeview.xlsx',sheet_name = 'Review',index_col=0)#using MemberID as index
+df = pd.read_excel('MRA Project\Aegis.xlsx',sheet_name = 'Review',index_col=0)#using MemberID as index
 
 #function to check if there is discrepancy in count of colon and semicolon in the text and also extract suggested diagnosis codes after removing is dot.
 def get_sdx(text): 

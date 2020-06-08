@@ -46,7 +46,7 @@ class PatientDeleteView (LoginRequiredMixin, DeleteView):
 class PatientCreateView (LoginRequiredMixin, CreateView):
     model = Patient
     template_name = 'patient_new.html'
-    fields = ('first_name', 'last_name','dob')
+    fields = ('first_name', 'last_name','gender','dob')
     login_url = 'login'
 
 # Following is an in-built form validation method. It is modified to pick create_by automatically.
