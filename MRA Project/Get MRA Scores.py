@@ -1,17 +1,17 @@
 import pandas as pd
 
-df = pd.read_excel('MRA Project\Aegis.xlsx',sheet_name = 'Review',index_col=0)#using MemberID as index
+df = pd.read_excel('MRA Project\Lakeview_Affiliates.xlsx',sheet_name = 'Review',index_col=0)#using MemberID as index
 
 #function to check if there is discrepancy in count of colon and semicolon in the text and also extract suggested diagnosis codes after removing is dot.
 def get_sdx(text): 
     text = str(text)
-    words_list = text.strip().replace('.','').replace(';','; ').split(' ')
-    sdx = [i[:-1] for i in words_list if ':' in i]
+    words_list = text.strip().replace(':',' ').replace(';',' ').split(' ')
+    sdx = [i.replace('.','') for i in words_list if '.' in i]
     sdx = [''] if len(sdx) == 0 else sdx
     sdx.insert(0,'No') if text.count(':') == text.count(';') else sdx.insert(0,'Yes')
     return sdx
 
-df['s_dx'] = df['Suggested Codes'].apply(get_sdx) #applying function and creating new column with the output
+df['s_dx'] = df['MRA- Not Captured Current Half of Year'].apply(get_sdx) #applying function and creating new column with the output
 
 my_dict = dict(zip(df.index, df.s_dx)) #adding discrepacy value and suggested diagnosis to dictionary where MemberID is the key
 
@@ -44,7 +44,7 @@ def get_adx(text):
 
 df['a_dx'] = df['MRA- All Active Codes'].apply(get_adx)
 
-#function to get all inactive active diagnosis codes for each MemberId. Here we are not capturing any discrepancy
+#function to get all inactive captured diagnosis codes for each MemberId. Here we are not capturing any discrepancy
 
 
 def get_iadx(text):
@@ -128,7 +128,7 @@ discrepancy_sdxweights_adxweights_diweights = pd.merge(discrepancy_sdxweights_ad
 
 output = pd.merge(df, discrepancy_sdxweights_adxweights_diweights, how = 'left', left_index = True, right_on = 'ID')
 
-output = output.drop(['s_dx','a_dx','ia_dx','final_active_dx'], axis = 1)
+#output = output.drop(['s_dx','a_dx','ia_dx','final_active_dx'], axis = 1)
 
 output.to_excel('MRA Project\AllResult.xlsx',index=False)
 
