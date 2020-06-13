@@ -7,6 +7,8 @@ def get_sdx(text):
     text = str(text)
     words_list = text.strip().replace(':',' ').replace(';',' ').split(' ')
     sdx = [i.replace('.','') for i in words_list if '.' in i]
+    sdx2 = [i for i in words_list if len(i) == 3 and i not in sdx]
+    sdx.append(sdx2)
     sdx = [''] if len(sdx) == 0 else sdx
     sdx.insert(0,'No') if text.count(':') == text.count(';') else sdx.insert(0,'Yes')
     return sdx
