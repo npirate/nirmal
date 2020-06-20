@@ -1,14 +1,14 @@
 import pandas as pd
 
-df = pd.read_excel('MRA Project\Lakeview_Affiliates.xlsx',sheet_name = 'Review',index_col=0)#using MemberID as index
+df = pd.read_excel('MRA Project\LAKEVIEW_AFFILIATES_CORRECTED_FILE.xlsx',sheet_name = 'Review',index_col=0)#using MemberID as index
 
-#function to check if there is discrepancy in count of colon and semicolon in the text and also extract suggested diagnosis codes after removing is dot.
+#function to check if there is discrepancy in count of colon and semicolon in the text and also extract suggested diagnosis codes after removing its dot.
 def get_sdx(text): 
     text = str(text)
     words_list = text.strip().replace(':',' ').replace(';',' ').split(' ')
     sdx = [i.replace('.','') for i in words_list if '.' in i]
     sdx2 = [i for i in words_list if len(i) == 3 and i not in sdx]
-    sdx.append(sdx2)
+    sdx.extend(sdx2)
     sdx = [''] if len(sdx) == 0 else sdx
     sdx.insert(0,'No') if text.count(':') == text.count(';') else sdx.insert(0,'Yes')
     return sdx
