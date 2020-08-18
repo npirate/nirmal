@@ -1,6 +1,6 @@
 import pandas as pd
 
-df = pd.read_excel('MRA Project\LAKEVIEW_AFFILIATES_CORRECTED_FILE.xlsx',sheet_name = 'Review',index_col=0)#using MemberID as index
+df = pd.read_excel(r'MRA Project\LAKEVIEW Codes not Captured July 2020.xlsx',sheet_name = 'Review',index_col=0)#using MemberID as index
 
 #function to check if there is discrepancy in count of colon and semicolon in the text and also extract suggested diagnosis codes after removing its dot.
 def get_sdx(text): 
@@ -96,9 +96,9 @@ alldd = alld[['ID','Disease']].merge(alld[['ID','Disease']], on='ID')
 alldd.drop_duplicates(inplace=True)
 
 #getting weights for each icd
-icdhcc = pd.read_excel('MRA Project\ICD2HCC2020.xlsx')
+icdhcc = pd.read_excel(r'MRA Project\ICD2HCC2020.xlsx')
 
-hccweights = pd.read_excel('MRA Project\HCC_Weight.xlsx')
+hccweights = pd.read_excel(r'MRA Project\HCC_Weight.xlsx')
 
 icdweights = pd.merge(hccweights, icdhcc, how='inner', right_on = 'CMS-HCC Model Category V24', left_on = 'HCC')
 
@@ -130,8 +130,8 @@ discrepancy_sdxweights_adxweights_diweights = pd.merge(discrepancy_sdxweights_ad
 
 output = pd.merge(df, discrepancy_sdxweights_adxweights_diweights, how = 'left', left_index = True, right_on = 'ID')
 
-#output = output.drop(['s_dx','a_dx','ia_dx','final_active_dx'], axis = 1)
+output = output.drop(['s_dx','a_dx','ia_dx','final_active_dx'], axis = 1)
 
-output.to_excel('MRA Project\AllResult.xlsx',index=False)
+output.to_excel(r'MRA Project\AllResult.xlsx',index=False)
 
 print ('Exported')

@@ -17,12 +17,12 @@ letter = input ("Letter to Type: ")
 #letter = letter.replace('.','. ')
 #letter = letter.replace(', ',',')
 #letter = letter.replace(',',', ')
-letter = letter.replace('! ','!')
-letter = letter.replace('!','! ')
-letter = letter.replace('? ','?')
-letter = letter.replace('?','? ')
-letter = letter.replace(': ',':')
-letter = letter.replace(':',': ')
+#letter = letter.replace('! ','!')
+#letter = letter.replace('!','! ')
+#letter = letter.replace('? ','?')
+#letter = letter.replace('?','? ')
+#letter = letter.replace(': ',':')
+#letter = letter.replace(':',': ')
 
 
 
@@ -31,7 +31,7 @@ letter = letter.replace(':',': ')
 #print (letter.replace(original,replaced_by))
 letter = letter.replace(original,replaced_by)
 print ('go to typing screen')
-time.sleep(5)
+time.sleep(7)
 pyautogui.typewrite (letter,delay) #more delay, lesser the speed
 pyautogui.hotkey ('enter')
 
