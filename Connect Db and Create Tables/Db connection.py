@@ -2,7 +2,7 @@
 import pandas as pd
 import pyodbc 
 cnxn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
-                      "Server=ayurtantra.database.windows.net;"
+                      "Server=ayurtantrallp.database.windows.net;"
                       #"Database=Nivano;"
                       #"UID=qcqauser;PWD=Q3Q@Us3r@1234"
                       "Database=AyurDB;"
@@ -16,7 +16,7 @@ cursor = cnxn.cursor()
 
 print ('process started')
 
-cursor.execute('select Fname from Patient_Detail')
+cursor.execute("exec SearchDoctor @Input_text = 'ni', @get_count = 0")
 
 for row in cursor.fetchall():
     print (row[0])
